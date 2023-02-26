@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1788/blocs/auth_bloc/auth_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'cubits/chat_cubit/chat_cubit.dart';
 import 'firebase_options.dart';
 import 'pages/chat_page.dart';
 import 'pages/login_page.dart';
@@ -19,16 +22,22 @@ class ScholarCate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        LoginPage.id: (context) => const LoginPage(),
-        RegisterPage.id: (context) => const RegisterPage(),
-        ChatPage.id: (context) => const ChatPage(),
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => ChatCubit())
+      ],
+      child: MaterialApp(
+        routes: {
+          LoginPage.id: (context) => const LoginPage(),
+          RegisterPage.id: (context) => const RegisterPage(),
+          ChatPage.id: (context) => const ChatPage(),
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: LoginPage.id,
       ),
-      initialRoute: LoginPage.id,
     );
   }
 }
